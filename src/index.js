@@ -30,7 +30,7 @@ const applyConfig = (config) => {
     ...config.views,
     errorViews: {
       ...config.views.errorViews,
-      '410': GoneView,
+      410: GoneView,
     },
   };
 

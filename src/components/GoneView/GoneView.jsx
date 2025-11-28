@@ -96,10 +96,7 @@ const GoneView = () => {
                 ),
                 homepage: (
                   <Link to="/">
-                    <FormattedMessage
-                      id="homepage"
-                      defaultMessage="homepage"
-                    />
+                    <FormattedMessage id="homepage" defaultMessage="homepage" />
                   </Link>
                 ),
               }}
@@ -109,10 +106,7 @@ const GoneView = () => {
 
         <div className="gone-option">
           <h3>
-            <FormattedMessage
-              id="Need help?"
-              defaultMessage="Need help?"
-            />
+            <FormattedMessage id="Need help?" defaultMessage="Need help?" />
           </h3>
           <p>
             <FormattedMessage

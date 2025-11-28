@@ -32,7 +32,11 @@ import {
   Dropdown,
 } from 'semantic-ui-react';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
-import { Icon, Toolbar, Pagination as VoltoPagination } from '@plone/volto/components';
+import {
+  Icon,
+  Toolbar,
+  Pagination as VoltoPagination,
+} from '@plone/volto/components';
 
 import backSVG from '@plone/volto/icons/back.svg';
 import zoomSVG from '@plone/volto/icons/zoom.svg';
@@ -98,19 +102,19 @@ class Redirects extends Component {
       oldUrlPath: '',
       isOldUrlCorrect: false,
       newUrlPath: '',
-      isNewUrlCorrect: true,  // Start as true since empty is valid
+      isNewUrlCorrect: true, // Start as true since empty is valid
       redirectsToRemove: [],
       errorMessageAdd: '',
       filterQuery: '',
-      searchScope: 'old_url',  // Default to searching old URLs only
+      searchScope: 'old_url', // Default to searching old URLs only
       redirects: [],
       activePage: 1,
       pages: '',
       itemsPerPage: 10,
-      statisticsResetKey: 0,  // Increment this to reset statistics counters
-      importingCSV: false,  // Loading state for CSV import
-      csvFile: null,  // Selected CSV file
-      isDragging: false,  // Dragging state for drop zone
+      statisticsResetKey: 0, // Increment this to reset statistics counters
+      importingCSV: false, // Loading state for CSV import
+      csvFile: null, // Selected CSV file
+      isDragging: false, // Dragging state for drop zone
     };
   }
 
@@ -147,7 +151,8 @@ class Redirects extends Component {
     ) {
       // Calculate total pages - ensure we always have at least 1 page if there are items
       const totalItems = this.props.redirects.items_total;
-      const pages = totalItems > 0 ? Math.ceil(totalItems / this.state.itemsPerPage) : 0;
+      const pages =
+        totalItems > 0 ? Math.ceil(totalItems / this.state.itemsPerPage) : 0;
 
       if (pages === 0 || isNaN(pages)) {
         this.setState({ pages: '' });
@@ -162,7 +167,7 @@ class Redirects extends Component {
       // Calculate batch start - ensure it doesn't exceed total items
       const batchStart = Math.min(
         (this.state.activePage - 1) * this.state.itemsPerPage,
-        Math.max(0, this.props.redirects.items_total - this.state.itemsPerPage)
+        Math.max(0, this.props.redirects.items_total - this.state.itemsPerPage),
       );
 
       this.props.getRedirects(getBaseUrl(this.props.pathname), {
@@ -212,10 +217,7 @@ class Redirects extends Component {
         });
       }
     }
-    if (
-      this.props.redirects.add.loading &&
-      nextProps.redirects.add.loaded
-    ) {
+    if (this.props.redirects.add.loading && nextProps.redirects.add.loaded) {
       const { filterQuery, itemsPerPage } = this.state;
 
       this.props.getRedirects(getBaseUrl(this.props.pathname), {
@@ -287,10 +289,11 @@ class Redirects extends Component {
    * @returns {undefined}
    */
   handleSubmitFilter() {
-    const { filterQuery, itemsPerPage, statisticsResetKey, searchScope } = this.state;
+    const { filterQuery, itemsPerPage, statisticsResetKey, searchScope } =
+      this.state;
     this.setState({
       activePage: 1,
-      statisticsResetKey: statisticsResetKey + 1,  // Reset counters on new search
+      statisticsResetKey: statisticsResetKey + 1, // Reset counters on new search
     });
     this.props.getRedirects(getBaseUrl(this.props.pathname), {
       query: filterQuery,
@@ -382,19 +385,23 @@ class Redirects extends Component {
    * @returns {undefined}
    */
   handleSelectAll = () => {
-    const allPaths = this.props.redirects.items?.map((redirect) => redirect.path) || [];
-    const allSelected = allPaths.length > 0 &&
-                        allPaths.every((path) => this.state.redirectsToRemove.includes(path));
+    const allPaths =
+      this.props.redirects.items?.map((redirect) => redirect.path) || [];
+    const allSelected =
+      allPaths.length > 0 &&
+      allPaths.every((path) => this.state.redirectsToRemove.includes(path));
 
     if (allSelected) {
       // Deselect all current page items
       const remainingPaths = this.state.redirectsToRemove.filter(
-        (path) => !allPaths.includes(path)
+        (path) => !allPaths.includes(path),
       );
       this.setState({ redirectsToRemove: remainingPaths });
     } else {
       // Select all current page items
-      const newPaths = [...new Set([...this.state.redirectsToRemove, ...allPaths])];
+      const newPaths = [
+        ...new Set([...this.state.redirectsToRemove, ...allPaths]),
+      ];
       this.setState({ redirectsToRemove: newPaths });
     }
   };
@@ -430,12 +437,11 @@ class Redirects extends Component {
     // Get selected redirects from all items
     const allItems = this.props.redirects.items || [];
     const selectedItems = allItems.filter((redirect) =>
-      this.state.redirectsToRemove.includes(redirect.path)
+      this.state.redirectsToRemove.includes(redirect.path),
     );
 
     this.exportToCSV(selectedItems, 'selected');
   };
-
 
   /**
    * Handle CSV file selection
@@ -522,7 +528,7 @@ class Redirects extends Component {
     try {
       // Read CSV file
       const text = await csvFile.text();
-      const lines = text.split('\n').filter(line => line.trim());
+      const lines = text.split('\n').filter((line) => line.trim());
 
       if (lines.length < 2) {
         throw new Error('CSV file is empty or has no data rows');
@@ -535,7 +541,9 @@ class Redirects extends Component {
         if (!line) continue;
 
         // Simple CSV parsing (handles quoted fields)
-        const matches = line.match(/("(?:[^"]|"")*"|[^,]*),("(?:[^"]|"")*"|[^,]*)/);
+        const matches = line.match(
+          /("(?:[^"]|"")*"|[^,]*),("(?:[^"]|"")*"|[^,]*)/,
+        );
         if (!matches) continue;
 
         let oldUrl = matches[1].trim();
@@ -576,7 +584,9 @@ class Redirects extends Component {
         <Toast
           success
           title="Success"
-          content={`Importing ${redirects.length} redirect${redirects.length !== 1 ? 's' : ''}...`}
+          content={`Importing ${redirects.length} redirect${
+            redirects.length !== 1 ? 's' : ''
+          }...`}
         />,
       );
     } catch (error) {
@@ -612,14 +622,20 @@ class Redirects extends Component {
     const csvContent = [
       headers.join(','),
       ...rows.map((row) =>
-        row.map((cell) => {
-          // Escape quotes and wrap in quotes if contains comma, quote, or newline
-          const cellStr = String(cell);
-          if (cellStr.includes(',') || cellStr.includes('"') || cellStr.includes('\n')) {
-            return `"${cellStr.replace(/"/g, '""')}"`;
-          }
-          return cellStr;
-        }).join(',')
+        row
+          .map((cell) => {
+            // Escape quotes and wrap in quotes if contains comma, quote, or newline
+            const cellStr = String(cell);
+            if (
+              cellStr.includes(',') ||
+              cellStr.includes('"') ||
+              cellStr.includes('\n')
+            ) {
+              return `"${cellStr.replace(/"/g, '""')}"`;
+            }
+            return cellStr;
+          })
+          .join(','),
       ),
     ].join('\n');
 
@@ -677,7 +693,13 @@ class Redirects extends Component {
                       defaultMessage="Search by old or new URL path. Supports regex patterns (e.g., ^/publications for paths starting with /publications)."
                     />
                   </p>
-                  <Form.Group style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5em' }}>
+                  <Form.Group
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-end',
+                      gap: '0.5em',
+                    }}
+                  >
                     <Form.Field style={{ flex: '1 1 auto' }}>
                       <Input
                         name="filter"
@@ -688,7 +710,9 @@ class Redirects extends Component {
                         }
                       />
                     </Form.Field>
-                    <Form.Field style={{ flex: '0 0 auto', minWidth: 'fit-content' }}>
+                    <Form.Field
+                      style={{ flex: '0 0 auto', minWidth: 'fit-content' }}
+                    >
                       <Dropdown
                         selection
                         name="searchScope"
@@ -719,9 +743,18 @@ class Redirects extends Component {
                   </Form.Group>
 
                   <Segment style={{ marginTop: '20px' }}>
-                    <Statistic.Group widths="4" size="small" stackable style={{ margin: '0 !important' }}>
+                    <Statistic.Group
+                      widths="4"
+                      size="small"
+                      stackable
+                      style={{ margin: '0 !important' }}
+                    >
                       <StatisticsBox
-                        label={this.state.filterQuery ? "Search Results" : "Total Redirects"}
+                        label={
+                          this.state.filterQuery
+                            ? 'Search Results'
+                            : 'Total Redirects'
+                        }
                         value={this.props.redirects.statistics?.total}
                         color="blue"
                         loading={this.props.redirects.getstatistics.loading}
@@ -764,7 +797,13 @@ class Redirects extends Component {
                     `}</style>
                   </Segment>
 
-                  <div style={{ position: 'relative', minHeight: '200px', marginTop: '20px' }}>
+                  <div
+                    style={{
+                      position: 'relative',
+                      minHeight: '200px',
+                      marginTop: '20px',
+                    }}
+                  >
                     {this.props.redirects.get.loading && (
                       <Dimmer active inverted>
                         <Loader inverted>
@@ -775,35 +814,52 @@ class Redirects extends Component {
                         </Loader>
                       </Dimmer>
                     )}
-                    <Table compact striped style={{ fontSize: '0.9em', tableLayout: 'fixed' }}>
+                    <Table
+                      compact
+                      striped
+                      style={{ fontSize: '0.9em', tableLayout: 'fixed' }}
+                    >
                       <Table.Header>
                         <Table.Row>
-                          <Table.HeaderCell style={{ width: '60px' }} textAlign="center">
+                          <Table.HeaderCell
+                            style={{ width: '60px' }}
+                            textAlign="center"
+                          >
                             <Checkbox
                               onChange={this.handleSelectAll}
                               checked={
                                 this.props.redirects.items?.length > 0 &&
                                 this.props.redirects.items.every((redirect) =>
-                                  this.state.redirectsToRemove.includes(redirect.path)
+                                  this.state.redirectsToRemove.includes(
+                                    redirect.path,
+                                  ),
                                 )
                               }
                               indeterminate={
                                 this.props.redirects.items?.some((redirect) =>
-                                  this.state.redirectsToRemove.includes(redirect.path)
+                                  this.state.redirectsToRemove.includes(
+                                    redirect.path,
+                                  ),
                                 ) &&
                                 !this.props.redirects.items?.every((redirect) =>
-                                  this.state.redirectsToRemove.includes(redirect.path)
+                                  this.state.redirectsToRemove.includes(
+                                    redirect.path,
+                                  ),
                                 )
                               }
                             />
                           </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: 'calc(50% - 30px)' }}>
+                          <Table.HeaderCell
+                            style={{ width: 'calc(50% - 30px)' }}
+                          >
                             <FormattedMessage
                               id="Old URL"
                               defaultMessage="Old URL"
                             />
                           </Table.HeaderCell>
-                          <Table.HeaderCell style={{ width: 'calc(50% - 30px)' }}>
+                          <Table.HeaderCell
+                            style={{ width: 'calc(50% - 30px)' }}
+                          >
                             <FormattedMessage
                               id="New URL"
                               defaultMessage="New URL"
@@ -835,7 +891,13 @@ class Redirects extends Component {
                                   overflow: 'hidden',
                                 }}
                               >
-                                <code style={{ background: '#f5f5f5', padding: '2px 4px', borderRadius: '3px' }}>
+                                <code
+                                  style={{
+                                    background: '#f5f5f5',
+                                    padding: '2px 4px',
+                                    borderRadius: '3px',
+                                  }}
+                                >
                                   {redirect.path}
                                 </code>
                               </Table.Cell>
@@ -847,7 +909,13 @@ class Redirects extends Component {
                                   overflow: 'hidden',
                                 }}
                               >
-                                <code style={{ background: '#e8f5e9', padding: '2px 4px', borderRadius: '3px' }}>
+                                <code
+                                  style={{
+                                    background: '#e8f5e9',
+                                    padding: '2px 4px',
+                                    borderRadius: '3px',
+                                  }}
+                                >
                                   {redirect['redirect-to']}
                                 </code>
                               </Table.Cell>
@@ -856,7 +924,13 @@ class Redirects extends Component {
                         ) : (
                           <Table.Row>
                             <Table.Cell colSpan={3}>
-                              <p style={{ textAlign: 'center', color: '#888', padding: '20px' }}>
+                              <p
+                                style={{
+                                  textAlign: 'center',
+                                  color: '#888',
+                                  padding: '20px',
+                                }}
+                              >
                                 <FormattedMessage
                                   id="No redirects found"
                                   defaultMessage="No redirects found"
@@ -874,11 +948,22 @@ class Redirects extends Component {
                       total={this.state.pages}
                       pageSize={this.state.itemsPerPage}
                       pageSizes={itemsPerPageChoices}
-                      onChangePage={(e, { value }) => this.setState({ activePage: value + 1 })}
-                      onChangePageSize={(e, { value }) => this.setState({ itemsPerPage: value, activePage: 1 })}
+                      onChangePage={(e, { value }) =>
+                        this.setState({ activePage: value + 1 })
+                      }
+                      onChangePageSize={(e, { value }) =>
+                        this.setState({ itemsPerPage: value, activePage: 1 })
+                      }
                     />
                   )}
-                  <div style={{ marginTop: '1em', display: 'flex', gap: '0.5em', flexWrap: 'wrap' }}>
+                  <div
+                    style={{
+                      marginTop: '1em',
+                      display: 'flex',
+                      gap: '0.5em',
+                      flexWrap: 'wrap',
+                    }}
+                  >
                     <Button
                       disabled={this.state.redirectsToRemove.length === 0}
                       onClick={this.handleRemoveRedirects}
@@ -1010,12 +1095,16 @@ class Redirects extends Component {
                     onDrop={this.handleDrop}
                     onClick={() => this.fileInputRef?.click()}
                     style={{
-                      border: this.state.isDragging ? '2px dashed #2185d0' : '2px dashed #ccc',
+                      border: this.state.isDragging
+                        ? '2px dashed #2185d0'
+                        : '2px dashed #ccc',
                       borderRadius: '8px',
                       padding: '40px 20px',
                       textAlign: 'center',
                       cursor: 'pointer',
-                      backgroundColor: this.state.isDragging ? '#f0f8ff' : '#fafafa',
+                      backgroundColor: this.state.isDragging
+                        ? '#f0f8ff'
+                        : '#fafafa',
                       transition: 'all 0.3s ease',
                       marginBottom: '1em',
                     }}
@@ -1024,7 +1113,9 @@ class Redirects extends Component {
                       type="file"
                       accept=".csv"
                       onChange={this.handleCSVFileChange}
-                      ref={(ref) => { this.fileInputRef = ref; }}
+                      ref={(ref) => {
+                        this.fileInputRef = ref;
+                      }}
                       style={{ display: 'none' }}
                     />
                     {this.state.importingCSV ? (
@@ -1039,7 +1130,11 @@ class Redirects extends Component {
                       </div>
                     ) : this.state.csvFile ? (
                       <div>
-                        <Icon name={downloadSVG} size="48px" style={{ opacity: 0.5 }} />
+                        <Icon
+                          name={downloadSVG}
+                          size="48px"
+                          style={{ opacity: 0.5 }}
+                        />
                         <p style={{ marginTop: '1em', fontWeight: 'bold' }}>
                           {this.state.csvFile.name}
                         </p>
@@ -1052,7 +1147,11 @@ class Redirects extends Component {
                       </div>
                     ) : (
                       <div>
-                        <Icon name={downloadSVG} size="48px" style={{ opacity: 0.3 }} />
+                        <Icon
+                          name={downloadSVG}
+                          size="48px"
+                          style={{ opacity: 0.3 }}
+                        />
                         <p style={{ marginTop: '1em', fontWeight: 'bold' }}>
                           <FormattedMessage
                             id="Drop CSV file here or click to browse"
@@ -1074,7 +1173,10 @@ class Redirects extends Component {
                       onClick={() => this.handleImportCSV()}
                       disabled={!this.state.csvFile}
                     >
-                      <FormattedMessage id="Import CSV" defaultMessage="Import CSV" />
+                      <FormattedMessage
+                        id="Import CSV"
+                        defaultMessage="Import CSV"
+                      />
                     </Button>
                   )}
                 </Segment>

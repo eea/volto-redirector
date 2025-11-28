@@ -69,7 +69,7 @@ export default function redirects(state = initialState, action = {}) {
     case `${GET_REDIRECTS_STATISTICS}_PENDING`:
       return {
         ...state,
-        statistics: null,  // Clear old statistics when new request starts
+        statistics: null, // Clear old statistics when new request starts
         [getRequestKey(action.type)]: {
           loading: true,
           loaded: false,
