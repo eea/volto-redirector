@@ -3,8 +3,8 @@
  */
 
 .page-gone .description {
-  font-size: 1.1rem;
   margin-bottom: 2rem;
+  font-size: 1.1rem;
 }
 
 .page-gone .gone-options {
@@ -16,15 +16,15 @@
 }
 
 .page-gone .gone-option h3 {
+  margin-bottom: 0.5rem;
   font-size: 1.3rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
 }
 
 .page-gone .gone-option p {
+  margin: 0;
   font-size: 1rem;
   line-height: 1.6;
-  margin: 0;
 }
 
 .page-gone .gone-option a {

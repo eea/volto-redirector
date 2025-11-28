@@ -36,15 +36,18 @@ import {
   Icon,
   Toolbar,
   Pagination as VoltoPagination,
+  Unauthorized,
 } from '@plone/volto/components';
+import loadable from '@loadable/component';
 
 import backSVG from '@plone/volto/icons/back.svg';
 import zoomSVG from '@plone/volto/icons/zoom.svg';
 import downloadSVG from '@plone/volto/icons/download.svg';
-import { map } from 'lodash';
 import { toast } from 'react-toastify';
 import { Toast } from '@plone/volto/components';
 import StatisticsBox from './StatisticsBox';
+
+const Dropzone = loadable(() => import('react-dropzone'));
 
 const messages = defineMessages({
   back: {
@@ -114,7 +117,6 @@ class Redirects extends Component {
       statisticsResetKey: 0, // Increment this to reset statistics counters
       importingCSV: false, // Loading state for CSV import
       csvFile: null, // Selected CSV file
-      isDragging: false, // Dragging state for drop zone
     };
   }
 
@@ -464,50 +466,16 @@ class Redirects extends Component {
   };
 
   /**
-   * Handle drag over
-   * @method handleDragOver
+   * Handle file drop from react-dropzone
+   * @method handleFileDrop
+   * @param {array} acceptedFiles - Array of accepted files
    * @returns {undefined}
    */
-  handleDragOver = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    this.setState({ isDragging: true });
-  };
-
-  /**
-   * Handle drag leave
-   * @method handleDragLeave
-   * @returns {undefined}
-   */
-  handleDragLeave = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    this.setState({ isDragging: false });
-  };
-
-  /**
-   * Handle drop
-   * @method handleDrop
-   * @returns {undefined}
-   */
-  handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    this.setState({ isDragging: false });
-
-    const file = e.dataTransfer.files[0];
-    if (file && file.type === 'text/csv') {
+  handleFileDrop = (acceptedFiles) => {
+    if (acceptedFiles && acceptedFiles.length > 0) {
+      const file = acceptedFiles[0];
       this.setState({ csvFile: file });
-      // Auto-import on drop
-      this.handleImportCSV(file);
-    } else if (file) {
-      toast.error(
-        <Toast
-          error
-          title="Invalid file type"
-          content="Please select a CSV file"
-        />,
-      );
+      this.handleImportCSV(file); // Auto-import on drop
     }
   };
 
@@ -590,7 +558,6 @@ class Redirects extends Component {
         />,
       );
     } catch (error) {
-      console.error('Import error:', error);
       toast.error(
         <Toast
           error
@@ -661,6 +628,12 @@ class Redirects extends Component {
    * @returns {string} Markup for the component.
    */
   render() {
+    // Check for unauthorized access (401 or 403 errors)
+    const error = this.props.redirects?.get?.error;
+    if (error && (error.status === 401 || error.status === 403)) {
+      return <Unauthorized />;
+    }
+
     return (
       <div id="page-redirects">
         <Helmet title={this.props.intl.formatMessage(messages.redirects)} />
@@ -1089,84 +1062,90 @@ class Redirects extends Component {
                       defaultMessage="Drag and drop a CSV file or click to browse. The file should have two columns: 'Old URL' and 'New URL'. The first row (header) will be skipped."
                     />
                   </p>
-                  <div
-                    onDragOver={this.handleDragOver}
-                    onDragLeave={this.handleDragLeave}
-                    onDrop={this.handleDrop}
-                    onClick={() => this.fileInputRef?.click()}
-                    style={{
-                      border: this.state.isDragging
-                        ? '2px dashed #2185d0'
-                        : '2px dashed #ccc',
-                      borderRadius: '8px',
-                      padding: '40px 20px',
-                      textAlign: 'center',
-                      cursor: 'pointer',
-                      backgroundColor: this.state.isDragging
-                        ? '#f0f8ff'
-                        : '#fafafa',
-                      transition: 'all 0.3s ease',
-                      marginBottom: '1em',
-                    }}
-                  >
-                    <input
-                      type="file"
-                      accept=".csv"
-                      onChange={this.handleCSVFileChange}
-                      ref={(ref) => {
-                        this.fileInputRef = ref;
-                      }}
-                      style={{ display: 'none' }}
-                    />
-                    {this.state.importingCSV ? (
-                      <div>
-                        <Loader active inline size="small" />
-                        <p style={{ marginTop: '1em', color: '#666' }}>
-                          <FormattedMessage
-                            id="Importing CSV..."
-                            defaultMessage="Importing CSV..."
-                          />
-                        </p>
-                      </div>
-                    ) : this.state.csvFile ? (
-                      <div>
-                        <Icon
-                          name={downloadSVG}
-                          size="48px"
-                          style={{ opacity: 0.5 }}
-                        />
-                        <p style={{ marginTop: '1em', fontWeight: 'bold' }}>
-                          {this.state.csvFile.name}
-                        </p>
-                        <p style={{ color: '#666', fontSize: '0.9em' }}>
-                          <FormattedMessage
-                            id="Click 'Import CSV' to upload or drop another file"
-                            defaultMessage="Click 'Import CSV' to upload or drop another file"
-                          />
-                        </p>
-                      </div>
-                    ) : (
-                      <div>
-                        <Icon
-                          name={downloadSVG}
-                          size="48px"
-                          style={{ opacity: 0.3 }}
-                        />
-                        <p style={{ marginTop: '1em', fontWeight: 'bold' }}>
-                          <FormattedMessage
-                            id="Drop CSV file here or click to browse"
-                            defaultMessage="Drop CSV file here or click to browse"
-                          />
-                        </p>
-                        <p style={{ color: '#666', fontSize: '0.9em' }}>
-                          <FormattedMessage
-                            id="File will be imported automatically on drop"
-                            defaultMessage="File will be imported automatically on drop"
-                          />
-                        </p>
-                      </div>
-                    )}
-                  </div>
+                  {this.state.isClient && (
+                    <Dropzone
+                      onDrop={this.handleFileDrop}
+                      accept=".csv,text/csv"
+                      multiple={false}
+                      noDragEventsBubbling={true}
+                    >
+                      {({ getRootProps, getInputProps, isDragActive }) => (
+                        <div
+                          {...getRootProps({
+                            className: 'dropzone',
+                            style: {
+                              border: isDragActive
+                                ? '2px dashed #2185d0'
+                                : '2px dashed #ccc',
+                              borderRadius: '8px',
+                              padding: '40px 20px',
+                              textAlign: 'center',
+                              cursor: 'pointer',
+                              backgroundColor: isDragActive
+                                ? '#f0f8ff'
+                                : '#fafafa',
+                              transition: 'all 0.3s ease',
+                              marginBottom: '1em',
+                            },
+                          })}
+                        >
+                          <input {...getInputProps()} />
+                          {this.state.importingCSV ? (
+                            <div>
+                              <Loader active inline size="small" />
+                              <p style={{ marginTop: '1em', color: '#666' }}>
+                                <FormattedMessage
+                                  id="Importing CSV..."
+                                  defaultMessage="Importing CSV..."
+                                />
+                              </p>
+                            </div>
+                          ) : this.state.csvFile ? (
+                            <div>
+                              <Icon
+                                name={downloadSVG}
+                                size="48px"
+                                style={{ opacity: 0.5 }}
+                              />
+                              <p
+                                style={{ marginTop: '1em', fontWeight: 'bold' }}
+                              >
+                                {this.state.csvFile.name}
+                              </p>
+                              <p style={{ color: '#666', fontSize: '0.9em' }}>
+                                <FormattedMessage
+                                  id="Click 'Import CSV' to upload or drop another file"
+                                  defaultMessage="Click 'Import CSV' to upload or drop another file"
+                                />
+                              </p>
+                            </div>
+                          ) : (
+                            <div>
+                              <Icon
+                                name={downloadSVG}
+                                size="48px"
+                                style={{ opacity: 0.3 }}
+                              />
+                              <p
+                                style={{ marginTop: '1em', fontWeight: 'bold' }}
+                              >
+                                <FormattedMessage
+                                  id="Drop CSV file here or click to browse"
+                                  defaultMessage="Drop CSV file here or click to browse"
+                                />
+                              </p>
+                              <p style={{ color: '#666', fontSize: '0.9em' }}>
+                                <FormattedMessage
+                                  id="File will be imported automatically on drop"
+                                  defaultMessage="File will be imported automatically on drop"
+                                />
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </Dropzone>
+                  )}
                   {this.state.csvFile && !this.state.importingCSV && (
                     <Button
                       primary
