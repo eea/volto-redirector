@@ -17,6 +17,10 @@
 
 [Volto](https://github.com/plone/volto) add-on
 
+## Demo
+
+![volto-redirector-demo](https://github.com/user-attachments/assets/d8778ada-785e-43b7-a56d-1cfdda8a8cb3)
+
 ## Features
 
 ### Control Panel Features
