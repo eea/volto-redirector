@@ -1,14 +1,32 @@
-version: "3"
 services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+
   backend:
-    image: eeacms/plone-backend
+    image: plone/plone-backend:6.0
     ports:
       - "8080:8080"
+    depends_on:
+      - redis
     environment:
       SITE: "Plone"
-      PROFILES: "eea.kitkat:testing"
+      # Install eea.api.redirector from PyPI
+      ADDONS: "eea.api.redirector"
+      PROFILES: "eea.api.redirector:default"
+      # Redis configuration
+      REDIS_SERVER: "redis"
+      REDIS_PORT: "6379"
+      REDIS_DB: "0"
+      REDIS_TIMEOUT: "5"
+    volumes:
+      - plone-data:/plone_data
 
-  frontend: 
+  frontend:
     build:
       context: ./
       dockerfile: ./Dockerfile
@@ -21,6 +39,7 @@ services:
     - "3001:3001"
     depends_on:
       - backend
+      - redis
     volumes:
       - ./:/app/src/addons/${ADDON_PATH}
     environment:
@@ -30,3 +49,7 @@ services:
       RAZZLE_INTERNAL_API_PATH: "http://backend:8080/Plone"
       RAZZLE_DEV_PROXY_API_PATH: "http://backend:8080/Plone"
       HOST: "0.0.0.0"
+
+volumes:
+  redis-data:
+  plone-data:

@@ -1,0 +1,33 @@
+/**
+ * GoneView styles
+ */
+
+.page-gone .description {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.page-gone .gone-options {
+  margin-top: 2rem;
+}
+
+.page-gone .gone-option {
+  margin-bottom: 2rem;
+}
+
+.page-gone .gone-option h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.page-gone .gone-option p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.page-gone .gone-option a {
+  font-weight: 500;
+  text-decoration: underline;
+}
