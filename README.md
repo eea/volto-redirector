@@ -19,7 +19,7 @@
 
 ## Demo
 
-![volto-redirector-demo](https://github.com/user-attachments/assets/d8778ada-785e-43b7-a56d-1cfdda8a8cb3)
+<video src="https://github.com/user-attachments/assets/d8778ada-785e-43b7-a56d-1cfdda8a8cb3" controls width="100%"></video>
 
 ## Features
 
