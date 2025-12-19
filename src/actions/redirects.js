@@ -8,6 +8,7 @@ import {
   ADD_REDIRECTS,
   REMOVE_REDIRECTS,
   GET_REDIRECTS_STATISTICS,
+  IMPORT_REDIRECTS,
 } from '../constants/ActionTypes';
 
 /**
@@ -80,6 +81,27 @@ export function removeRedirects(url, data) {
       op: 'del',
       path: `${url}/@redirects`,
       data,
+    },
+  };
+}
+
+/**
+ * Import redirects from CSV file.
+ * @function importRedirects
+ * @param {string} url Content url (usually site root).
+ * @param {File} file CSV file to import.
+ * @returns {Object} Import redirects action.
+ */
+export function importRedirects(url, file) {
+  const formData = new FormData();
+  formData.append('file', file, file?.name || 'redirects.csv');
+
+  return {
+    type: IMPORT_REDIRECTS,
+    request: {
+      op: 'post',
+      path: `${url}/@redirects-import`,
+      data: formData,
     },
   };
 }

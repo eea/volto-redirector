@@ -8,6 +8,7 @@ import {
   ADD_REDIRECTS,
   REMOVE_REDIRECTS,
   GET_REDIRECTS_STATISTICS,
+  IMPORT_REDIRECTS,
 } from '../constants/ActionTypes';
 
 const initialState = {
@@ -30,6 +31,12 @@ const initialState = {
     loaded: false,
     loading: false,
     error: null,
+  },
+  import: {
+    loaded: false,
+    loading: false,
+    error: null,
+    result: null,
   },
   items: [],
   items_total: 0,
@@ -58,12 +65,14 @@ export default function redirects(state = initialState, action = {}) {
     case `${ADD_REDIRECTS}_PENDING`:
     case `${GET_REDIRECTS}_PENDING`:
     case `${REMOVE_REDIRECTS}_PENDING`:
+    case `${IMPORT_REDIRECTS}_PENDING`:
       return {
         ...state,
         [getRequestKey(action.type)]: {
           loading: true,
           loaded: false,
           error: null,
+          result: null,
         },
       };
     case `${GET_REDIRECTS_STATISTICS}_PENDING`:
@@ -107,10 +116,21 @@ export default function redirects(state = initialState, action = {}) {
           error: action.result?.failed,
         },
       };
+    case `${IMPORT_REDIRECTS}_SUCCESS`:
+      return {
+        ...state,
+        import: {
+          loading: false,
+          loaded: true,
+          error: action.result?.failed,
+          result: action.result || null,
+        },
+      };
     case `${GET_REDIRECTS}_FAIL`:
     case `${ADD_REDIRECTS}_FAIL`:
     case `${REMOVE_REDIRECTS}_FAIL`:
     case `${GET_REDIRECTS_STATISTICS}_FAIL`:
+    case `${IMPORT_REDIRECTS}_FAIL`:
       return {
         ...state,
         [getRequestKey(action.type)]: {
