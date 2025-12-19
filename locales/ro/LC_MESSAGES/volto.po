@@ -11,4 +11,217 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
+#. Default: "Add"
+#: components/Controlpanels/Redirects
+msgid "Add"
+msgstr ""
 
+#. Default: "Add a new redirect"
+#: components/Controlpanels/Redirects
+msgid "Add a new redirect"
+msgstr ""
+
+#. Default: "Back"
+#: components/Controlpanels/Redirects
+msgid "Back"
+msgstr ""
+
+#. Default: "Click 'Import CSV' to upload or drop another file"
+#: components/Controlpanels/Redirects
+msgid "Click 'Import CSV' to upload or drop another file"
+msgstr ""
+
+#. Default: "Drag and drop a CSV file or click to browse. The file should have two columns: 'Old URL' and 'New URL'. The first row (header) will be skipped."
+#: components/Controlpanels/Redirects
+msgid "Drag and drop a CSV file or click to browse. The file should have two columns: 'Old URL' and 'New URL'. The first row (header) will be skipped."
+msgstr ""
+
+#. Default: "Drop CSV file here or click to browse"
+#: components/Controlpanels/Redirects
+msgid "Drop CSV file here or click to browse"
+msgstr ""
+
+#. Default: "EEA Redirects"
+#: components/Controlpanels/Redirects
+msgid "EEA Redirects"
+msgstr ""
+
+#. Default: "Enter the absolute path of the old URL. The path must start with '/'."
+#: components/Controlpanels/Redirects
+msgid "Enter the absolute path of the old URL. The path must start with '/'."
+msgstr ""
+
+#. Default: "Enter the absolute path or full URL of the target. The path must start with '/' or be a full URL (http://, https://). Leave empty for HTTP 410 (Gone) - deleted pages."
+#: components/Controlpanels/Redirects
+msgid "Enter the absolute path or full URL of the target. The path must start with '/' or be a full URL (http://, https://). Leave empty for HTTP 410 (Gone) - deleted pages."
+msgstr ""
+
+#. Default: "Error"
+#: components/Controlpanels/Redirects
+msgid "ErrorHeader"
+msgstr ""
+
+#. Default: "Export selected"
+#: components/Controlpanels/Redirects
+msgid "Export selected"
+msgstr ""
+
+#. Default: "File will be imported automatically on drop"
+#: components/Controlpanels/Redirects
+msgid "File will be imported automatically on drop"
+msgstr ""
+
+#. Default: "If you believe this page should not have been removed, please contact the {site_admin}."
+#: components/GoneView/GoneView
+msgid "If you believe this page should not have been removed, please contact the {site_admin}."
+msgstr ""
+
+#. Default: "Import CSV"
+#: components/Controlpanels/Redirects
+msgid "Import CSV"
+msgstr ""
+
+#. Default: "Importing CSV..."
+#: components/Controlpanels/Redirects
+msgid "Importing CSV..."
+msgstr ""
+
+#. Default: "Loading redirects..."
+#: components/Controlpanels/Redirects
+msgid "Loading redirects..."
+msgstr ""
+
+#. Default: "Looking for something specific?"
+#: components/GoneView/GoneView
+msgid "Looking for something specific?"
+msgstr ""
+
+#. Default: "Manage URL redirects stored in Redis. Redirects are used to forward users from old URLs to new URLs."
+#: components/Controlpanels/Redirects
+msgid "Manage URL redirects stored in Redis. Redirects are used to forward users from old URLs to new URLs."
+msgstr ""
+
+#. Default: "Need help?"
+#: components/GoneView/GoneView
+msgid "Need help?"
+msgstr ""
+
+#. Default: "New URL"
+#: components/Controlpanels/Redirects
+msgid "New URL"
+msgstr ""
+
+#. Default: "New URL Path"
+#: components/Controlpanels/Redirects
+msgid "New URL Path"
+msgstr ""
+
+#. Default: "New URL must start with a slash, be a full URL, or be empty for Gone."
+#: components/Controlpanels/Redirects
+msgid "New URL must start with a slash, be a full URL, or be empty for Gone."
+msgstr ""
+
+#. Default: "No redirects found"
+#: components/Controlpanels/Redirects
+msgid "No redirects found"
+msgstr ""
+
+#. Default: "Old URL"
+#: components/Controlpanels/Redirects
+msgid "Old URL"
+msgstr ""
+
+#. Default: "Old URL Path (Required)"
+#: components/Controlpanels/Redirects
+msgid "Old URL Path (Required)"
+msgstr ""
+
+#. Default: "Old URL path must start with a slash."
+#: components/Controlpanels/Redirects
+msgid "Old URL path must start with a slash."
+msgstr ""
+
+#. Default: "Or import from CSV"
+#: components/Controlpanels/Redirects
+msgid "Or import from CSV"
+msgstr ""
+
+#. Default: "Redirect has been added"
+#: components/Controlpanels/Redirects
+msgid "Redirect has been added"
+msgstr ""
+
+#. Default: "Redirect(s) have been removed"
+#: components/Controlpanels/Redirects
+msgid "Redirect(s) have been removed"
+msgstr ""
+
+#. Default: "Remove selected"
+#: components/Controlpanels/Redirects
+msgid "Remove selected"
+msgstr ""
+
+#. Default: "Search by old or new URL path. Supports regex patterns (e.g., ^/publications for paths starting with /publications)."
+#: components/Controlpanels/Redirects
+msgid "Search by old or new URL path. Supports regex patterns (e.g., ^/publications for paths starting with /publications)."
+msgstr ""
+
+#. Default: "Search redirects"
+#: components/Controlpanels/Redirects
+msgid "Search redirects"
+msgstr ""
+
+#. Default: "Site Administration"
+#: components/GoneView/GoneView
+msgid "Site Administration"
+msgstr ""
+
+#. Default: "Success"
+#: components/Controlpanels/Redirects
+msgid "Success"
+msgstr ""
+
+#. Default: "This Page No Longer Exists"
+#: components/GoneView/GoneView
+msgid "This Page No Longer Exists"
+msgstr ""
+
+#. Default: "This content has been permanently removed and is no longer available."
+#: components/GoneView/GoneView
+msgid "This content has been permanently removed and is no longer available."
+msgstr ""
+
+#. Default: "Try our {search} or visit our {homepage} to find what you need."
+#: components/GoneView/GoneView
+msgid "Try our {search} or visit our {homepage} to find what you need."
+msgstr ""
+
+#. Default: "View archived version"
+#: components/GoneView/GoneView
+msgid "View archived version"
+msgstr ""
+
+#. Default: "Wayback Machine"
+#: components/GoneView/GoneView
+msgid "Wayback Machine"
+msgstr ""
+
+#. Default: "What you can do?"
+#: components/GoneView/GoneView
+msgid "What you can do?"
+msgstr ""
+
+#. Default: "You may be able to find an archived copy of this page on the {archive_url}"
+#: components/GoneView/GoneView
+msgid "You may be able to find an archived copy of this page on the {archive_url}"
+msgstr ""
+
+#. Default: "homepage"
+#: components/GoneView/GoneView
+msgid "homepage"
+msgstr ""
+
+#. Default: "search"
+#: components/GoneView/GoneView
+msgid "search"
+msgstr ""
