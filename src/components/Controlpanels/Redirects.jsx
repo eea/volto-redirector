@@ -14,6 +14,7 @@ import {
   addRedirects,
   getRedirects,
   getRedirectsStatistics,
+  importRedirects,
 } from '../../actions/redirects';
 import { Portal } from 'react-portal';
 import {
@@ -90,6 +91,7 @@ class Redirects extends Component {
     getRedirects: PropTypes.func.isRequired,
     getRedirectsStatistics: PropTypes.func.isRequired,
     removeRedirects: PropTypes.func.isRequired,
+    importRedirects: PropTypes.func.isRequired,
   };
 
   /**
@@ -210,6 +212,66 @@ class Redirects extends Component {
    * @returns {undefined}
    */
   UNSAFE_componentWillReceiveProps(nextProps) {
+    if (
+      this.props.redirects.import.loading &&
+      !nextProps.redirects.import.loaded &&
+      nextProps.redirects.import.error
+    ) {
+      toast.error(
+        <Toast
+          error
+          title="Error"
+          content={
+            nextProps.redirects.import.error.response?.body?.message ||
+            'Failed to import CSV'
+          }
+        />,
+      );
+      this.setState({ importingCSV: false });
+    }
+    if (
+      this.props.redirects.import.loading &&
+      nextProps.redirects.import.loaded
+    ) {
+      const { filterQuery, itemsPerPage } = this.state;
+      const result = nextProps.redirects.import.result;
+      const failedCount = result?.failed_count || 0;
+      const successCount = result?.success_count || 0;
+
+      this.props.getRedirects(getBaseUrl(this.props.pathname), {
+        query: filterQuery,
+        batchSize: itemsPerPage,
+      });
+      this.props.getRedirectsStatistics(getBaseUrl(this.props.pathname), {
+        query: filterQuery,
+      });
+
+      if (failedCount > 0) {
+        toast.error(
+          <Toast
+            error
+            title="Import completed with errors"
+            content={`${successCount} added, ${failedCount} failed`}
+          />,
+        );
+      } else {
+        toast.success(
+          <Toast
+            success
+            title="Import completed"
+            content={`${successCount} redirect${
+              successCount !== 1 ? 's' : ''
+            } added`}
+          />,
+        );
+      }
+
+      this.setState({ importingCSV: false, csvFile: null });
+      if (this.fileInputRef) {
+        this.fileInputRef.value = '';
+      }
+    }
+
     if (this.props.redirects.add.loading && !nextProps.redirects.add.loaded) {
       if (nextProps.redirects.add.error) {
         this.setState({
@@ -494,68 +556,10 @@ class Redirects extends Component {
     this.setState({ importingCSV: true, csvFile });
 
     try {
-      // Read CSV file
-      const text = await csvFile.text();
-      const lines = text.split('\n').filter((line) => line.trim());
-
-      if (lines.length < 2) {
-        throw new Error('CSV file is empty or has no data rows');
-      }
-
-      // Parse CSV (skip header row)
-      const redirects = [];
-      for (let i = 1; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (!line) continue;
-
-        // Simple CSV parsing (handles quoted fields)
-        const matches = line.match(
-          /("(?:[^"]|"")*"|[^,]*),("(?:[^"]|"")*"|[^,]*)/,
-        );
-        if (!matches) continue;
-
-        let oldUrl = matches[1].trim();
-        let newUrl = matches[2].trim();
-
-        // Remove quotes if present
-        if (oldUrl.startsWith('"') && oldUrl.endsWith('"')) {
-          oldUrl = oldUrl.slice(1, -1).replace(/""/g, '"');
-        }
-        if (newUrl.startsWith('"') && newUrl.endsWith('"')) {
-          newUrl = newUrl.slice(1, -1).replace(/""/g, '"');
-        }
-
-        if (oldUrl) {
-          redirects.push({
-            path: oldUrl,
-            'redirect-to': newUrl || '',
-          });
-        }
-      }
-
-      if (redirects.length === 0) {
-        throw new Error('No valid redirects found in CSV file');
-      }
-
-      // Send to backend
-      this.props.addRedirects(getBaseUrl(this.props.pathname), {
-        items: redirects,
-      });
-
-      // Clear file input
-      this.setState({ csvFile: null });
-      if (this.fileInputRef) {
-        this.fileInputRef.value = '';
-      }
+      this.props.importRedirects(getBaseUrl(this.props.pathname), csvFile);
 
       toast.success(
-        <Toast
-          success
-          title="Success"
-          content={`Importing ${redirects.length} redirect${
-            redirects.length !== 1 ? 's' : ''
-          }...`}
-        />,
+        <Toast success title="Success" content="Import started..." />,
       );
     } catch (error) {
       toast.error(
@@ -565,7 +569,6 @@ class Redirects extends Component {
           content={`Failed to import CSV: ${error.message}`}
         />,
       );
-    } finally {
       this.setState({ importingCSV: false });
     }
   };
@@ -1193,6 +1196,12 @@ export default compose(
       redirects: state.redirects,
       pathname: props.location.pathname,
     }),
-    { addRedirects, getRedirects, getRedirectsStatistics, removeRedirects },
+    {
+      addRedirects,
+      getRedirects,
+      getRedirectsStatistics,
+      removeRedirects,
+      importRedirects,
+    },
   ),
 )(Redirects);
