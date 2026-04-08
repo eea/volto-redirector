@@ -16,7 +16,7 @@ import {
   getRedirects,
   getRedirectsStatistics,
   importRedirects,
-} from '../../actions/redirects';
+} from '@eeacms/volto-redirector/actions/redirects';
 import { Portal } from 'react-portal';
 import {
   Container,
