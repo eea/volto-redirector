@@ -9,7 +9,7 @@ import {
   REMOVE_REDIRECTS,
   GET_REDIRECTS_STATISTICS,
   IMPORT_REDIRECTS,
-} from '../constants/ActionTypes';
+} from '@eeacms/volto-redirector/constants/ActionTypes';
 
 const initialState = {
   add: {
