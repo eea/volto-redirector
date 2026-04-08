@@ -8,7 +8,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Link } from 'react-router-dom';
-import { getBaseUrl, getParentUrl, Helmet } from '@plone/volto/helpers';
+import Helmet from '@plone/volto/helpers//Helmet/Helmet';
+import { getBaseUrl, getParentUrl } from '@plone/volto/helpers/Url/Url';
 import {
   removeRedirects,
   addRedirects,
@@ -33,19 +34,17 @@ import {
   Dropdown,
 } from 'semantic-ui-react';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
-import {
-  Icon,
-  Toolbar,
-  Pagination as VoltoPagination,
-  Unauthorized,
-} from '@plone/volto/components';
+import Icon from '@plone/volto/components/theme/Icon/Icon';
+import Toolbar from '@plone/volto/components/manage/Toolbar/Toolbar';
+import VoltoPagination from '@plone/volto/components/theme/Pagination/Pagination';
+import Unauthorized from '@plone/volto/components/theme/Unauthorized/Unauthorized';
 import loadable from '@loadable/component';
 
 import backSVG from '@plone/volto/icons/back.svg';
 import zoomSVG from '@plone/volto/icons/zoom.svg';
 import downloadSVG from '@plone/volto/icons/download.svg';
 import { toast } from 'react-toastify';
-import { Toast } from '@plone/volto/components';
+import Toast from '@plone/volto/components/manage/Toast/Toast';
 import StatisticsBox from './StatisticsBox';
 
 const Dropzone = loadable(() => import('react-dropzone'));

@@ -9,7 +9,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
 import { withServerErrorCode } from '@plone/volto/helpers/Utils/Utils';
-import { BodyClass } from '@plone/volto/helpers';
+import BodyClass from '@plone/volto/helpers/BodyClass/BodyClass';
 import './GoneView.css';
 
 /**
