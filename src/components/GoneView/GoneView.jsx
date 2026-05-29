@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { Container } from 'semantic-ui-react';
+import { Accordion, Container } from 'semantic-ui-react';
 import { withServerErrorCode } from '@plone/volto/helpers/Utils/Utils';
 import BodyClass from '@plone/volto/helpers/BodyClass/BodyClass';
 import './GoneView.css';
@@ -18,8 +18,15 @@ import './GoneView.css';
  * @function GoneView
  * @returns {JSX.Element} Markup of the gone page.
  */
-const GoneView = () => {
+export const GoneView = () => {
   const [archiveUrl, setArchiveUrl] = useState('');
+  const [activeIndex, setActiveIndex] = useState(-1);
+
+  const handleAccordionClick = (e, titleProps) => {
+    const { index } = titleProps;
+    const newIndex = activeIndex === index ? -1 : index;
+    setActiveIndex(newIndex);
+  };
 
   useEffect(() => {
     setArchiveUrl(`https://web.archive.org/*/${window.location.href}`);
@@ -30,14 +37,14 @@ const GoneView = () => {
       <BodyClass className="page-gone" />
       <h1>
         <FormattedMessage
-          id="This Page No Longer Exists"
-          defaultMessage="This Page No Longer Exists"
+          id="This page has been retired"
+          defaultMessage="This page has been retired"
         />
       </h1>
       <p className="description">
         <FormattedMessage
-          id="This content has been permanently removed and is no longer available."
-          defaultMessage="This content has been permanently removed and is no longer available."
+          id="This content was part of our previous website and is no longer available. We've recently upgraded our platform and restructured our content to serve you better."
+          defaultMessage="This content was part of our previous website and is no longer available. We've recently upgraded our platform and restructured our content to serve you better."
         />
       </p>
       <h2>
@@ -47,84 +54,113 @@ const GoneView = () => {
         />
       </h2>
 
-      <div className="gone-options">
-        <div className="gone-option">
-          <h3>
-            <FormattedMessage
-              id="View archived version"
-              defaultMessage="View archived version"
+      <div className="accordion-block">
+        <Accordion className="secondary">
+          <Accordion.Title
+            active={activeIndex === 0}
+            index={0}
+            onClick={handleAccordionClick}
+            tabIndex={0}
+            role="button"
+            aria-expanded={activeIndex === 0}
+            onKeyDown={(e) => {
+              if (e.keyCode === 13 || e.keyCode === 32) {
+                e.preventDefault();
+                handleAccordionClick(e, { index: 0 });
+              }
+            }}
+          >
+            <span>
+              <FormattedMessage
+                id="View archived version"
+                defaultMessage="View archived version"
+              />
+            </span>
+            <i
+              className={
+                activeIndex === 0
+                  ? 'ri-arrow-up-s-line'
+                  : 'ri-arrow-down-s-line'
+              }
             />
-          </h3>
-          <p>
-            <FormattedMessage
-              id="You may be able to find an archived copy of this page on the {archive_url}"
-              defaultMessage="You may be able to find an archived copy of this page on the {archive_url}"
-              values={{
-                archive_url: (
-                  <a
-                    href={archiveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <FormattedMessage
-                      id="Wayback Machine"
-                      defaultMessage="Wayback Machine"
-                    />
-                  </a>
-                ),
-              }}
-            />
-          </p>
-        </div>
+          </Accordion.Title>
+          <Accordion.Content active={activeIndex === 0}>
+            <p>
+              <FormattedMessage
+                id="You may be able to find an archived copy of this page on the {archive_url}"
+                defaultMessage="You may be able to find an archived copy of this page on the {archive_url}"
+                values={{
+                  archive_url: (
+                    <a
+                      href={archiveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FormattedMessage
+                        id="Wayback Machine"
+                        defaultMessage="Wayback Machine"
+                      />
+                    </a>
+                  ),
+                }}
+              />
+            </p>
+          </Accordion.Content>
+        </Accordion>
 
-        <div className="gone-option">
-          <h3>
-            <FormattedMessage
-              id="Looking for something specific?"
-              defaultMessage="Looking for something specific?"
+        <Accordion className="secondary">
+          <Accordion.Title
+            active={activeIndex === 2}
+            index={2}
+            onClick={handleAccordionClick}
+            tabIndex={0}
+            role="button"
+            aria-expanded={activeIndex === 2}
+            onKeyDown={(e) => {
+              if (e.keyCode === 13 || e.keyCode === 32) {
+                e.preventDefault();
+                handleAccordionClick(e, { index: 2 });
+              }
+            }}
+          >
+            <span>
+              <FormattedMessage
+                id="Looking for something specific?"
+                defaultMessage="Looking for something specific?"
+              />
+            </span>
+            <i
+              className={
+                activeIndex === 2
+                  ? 'ri-arrow-up-s-line'
+                  : 'ri-arrow-down-s-line'
+              }
             />
-          </h3>
-          <p>
-            <FormattedMessage
-              id="Try our {search} or visit our {homepage} to find what you need."
-              defaultMessage="Try our {search} or visit our {homepage} to find what you need."
-              values={{
-                search: (
-                  <Link to="/search">
-                    <FormattedMessage id="search" defaultMessage="search" />
-                  </Link>
-                ),
-                homepage: (
-                  <Link to="/">
-                    <FormattedMessage id="homepage" defaultMessage="homepage" />
-                  </Link>
-                ),
-              }}
-            />
-          </p>
-        </div>
-
-        <div className="gone-option">
-          <h3>
-            <FormattedMessage id="Need help?" defaultMessage="Need help?" />
-          </h3>
-          <p>
-            <FormattedMessage
-              id="If you believe this page should not have been removed, please contact the {site_admin}."
-              defaultMessage="If you believe this page should not have been removed, please contact the {site_admin}."
-              values={{
-                site_admin: (
-                  <Link to="/contact-form">
-                    <FormattedMessage
-                      id="Site Administration"
-                      defaultMessage="Site Administration"
-                    />
-                  </Link>
-                ),
-              }}
-            />
-          </p>
-        </div>
+          </Accordion.Title>
+          <Accordion.Content active={activeIndex === 2}>
+            <p>
+              <FormattedMessage
+                id="Try our {search} or visit our {homepage} to find what you need on our updated site."
+                defaultMessage="Try our {search} or visit our {homepage} to find what you need on our updated site."
+                values={{
+                  search: (
+                    <Link to="/en/advanced-search">
+                      <FormattedMessage id="search" defaultMessage="search" />
+                    </Link>
+                  ),
+                  homepage: (
+                    <Link to="/en">
+                      <FormattedMessage
+                        id="homepage"
+                        defaultMessage="homepage"
+                      />
+                    </Link>
+                  ),
+                }}
+              />
+            </p>
+          </Accordion.Content>
+        </Accordion>
       </div>
     </Container>
   );
