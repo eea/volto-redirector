@@ -50,6 +50,10 @@ const initialState = {
  * @returns {string} Request key.
  */
 function getRequestKey(actionType) {
+  if (actionType.startsWith(GET_REDIRECTS_STATISTICS)) {
+    return 'getstatistics';
+  }
+
   return actionType.split('_')[0].toLowerCase();
 }
 
