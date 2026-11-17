@@ -1,6 +1,7 @@
 {
   "name": "@eeacms/volto-redirector-dev",
-  "version": "1.0.0-alpha.0",
+  "private": true,
+  "version": "2.0.0",
   "description": "@eeacms/volto-redirector: Volto add-on",
   "author": "European Environment Agency: IDM2 A-Team",
   "homepage": "https://github.com/eea/volto-redirector",
