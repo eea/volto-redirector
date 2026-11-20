@@ -10,6 +10,21 @@
 
 <video src="https://github.com/user-attachments/assets/d8778ada-785e-43b7-a56d-1cfdda8a8cb3" controls width="100%"></video>
 
+## Upgrade
+
+### Upgrading to 2.x
+
+> This version requires `Volto 18` or `Volto 19` and Node.js 22.
+
+The control panel, its route, the `410` error view and the `@redirects` endpoints are unchanged, so existing redirects keep working without configuration changes. The published package now lives in `packages/volto-redirector`.
+
+The toolbar button mounts through `react-dom`'s `createPortal` now, which removes a `react-portal` import the add-on never declared.
+
+#### Breaking changes
+
+- **Node.js 22 or newer is required** (`engines.node >= 22`).
+- **React 18 is required.** The package declares `react` and `react-dom` as `^18.2.0` peers.
+
 ## Features
 
 ### Control Panel Features
