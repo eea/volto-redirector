@@ -466,7 +466,9 @@ class Redirects extends Component {
 
       // Select all current page items
       return {
-        redirectsToRemove: [...new Set([...prev.redirectsToRemove, ...allPaths])],
+        redirectsToRemove: [
+          ...new Set([...prev.redirectsToRemove, ...allPaths]),
+        ],
       };
     });
   };
