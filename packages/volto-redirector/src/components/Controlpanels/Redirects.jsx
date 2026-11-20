@@ -17,7 +17,7 @@ import {
   getRedirectsStatistics,
   importRedirects,
 } from '@eeacms/volto-redirector/actions/redirects';
-import { Portal } from 'react-portal';
+import { createPortal } from 'react-dom';
 import {
   Container,
   Button,
@@ -419,9 +419,9 @@ class Redirects extends Component {
         this.setState({ redirectsToRemove: newRedirectsArr });
       }
     } else {
-      this.setState({
-        redirectsToRemove: [...this.state.redirectsToRemove, redirect],
-      });
+      this.setState((prev) => ({
+        redirectsToRemove: [...prev.redirectsToRemove, redirect],
+      }));
     }
   }
 
@@ -454,19 +454,23 @@ class Redirects extends Component {
       allPaths.length > 0 &&
       allPaths.every((path) => this.state.redirectsToRemove.includes(path));
 
-    if (allSelected) {
-      // Deselect all current page items
-      const remainingPaths = this.state.redirectsToRemove.filter(
-        (path) => !allPaths.includes(path),
-      );
-      this.setState({ redirectsToRemove: remainingPaths });
-    } else {
+    this.setState((prev) => {
+      if (allSelected) {
+        // Deselect all current page items
+        return {
+          redirectsToRemove: prev.redirectsToRemove.filter(
+            (path) => !allPaths.includes(path),
+          ),
+        };
+      }
+
       // Select all current page items
-      const newPaths = [
-        ...new Set([...this.state.redirectsToRemove, ...allPaths]),
-      ];
-      this.setState({ redirectsToRemove: newPaths });
-    }
+      return {
+        redirectsToRemove: [
+          ...new Set([...prev.redirectsToRemove, ...allPaths]),
+        ],
+      };
+    });
   };
 
   /**
@@ -552,7 +556,7 @@ class Redirects extends Component {
       return;
     }
 
-    this.setState({ importingCSV: true, csvFile });
+    this.setState({ importingCSV: true });
 
     try {
       this.props.importRedirects(getBaseUrl(this.props.pathname), csvFile);
@@ -1165,8 +1169,8 @@ class Redirects extends Component {
             </Segment.Group>
           </article>
         </Container>
-        {this.state.isClient && (
-          <Portal node={document.getElementById('toolbar')}>
+        {this.state.isClient &&
+          createPortal(
             <Toolbar
               pathname={this.props.pathname}
               hideDefaultViewButtons
@@ -1180,9 +1184,9 @@ class Redirects extends Component {
                   />
                 </Link>
               }
-            />
-          </Portal>
-        )}
+            />,
+            document.getElementById('toolbar'),
+          )}
       </div>
     );
   }
