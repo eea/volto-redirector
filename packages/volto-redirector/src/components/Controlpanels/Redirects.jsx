@@ -17,7 +17,7 @@ import {
   getRedirectsStatistics,
   importRedirects,
 } from '@eeacms/volto-redirector/actions/redirects';
-import { Portal } from 'react-portal';
+import { createPortal } from 'react-dom';
 import {
   Container,
   Button,
@@ -1165,8 +1165,8 @@ class Redirects extends Component {
             </Segment.Group>
           </article>
         </Container>
-        {this.state.isClient && (
-          <Portal node={document.getElementById('toolbar')}>
+        {this.state.isClient &&
+          createPortal(
             <Toolbar
               pathname={this.props.pathname}
               hideDefaultViewButtons
@@ -1180,9 +1180,9 @@ class Redirects extends Component {
                   />
                 </Link>
               }
-            />
-          </Portal>
-        )}
+            />,
+            document.getElementById('toolbar'),
+          )}
       </div>
     );
   }

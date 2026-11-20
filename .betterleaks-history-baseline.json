@@ -1,0 +1,109 @@
+[
+ {
+  "RuleID": "env-short-secret-assignment",
+  "Description": "Uppercase env-style PASS/TOKEN/SECRET assignment",
+  "StartLine": 36,
+  "EndLine": 36,
+  "StartColumn": 11,
+  "EndColumn": 49,
+  "Match": "GITHUB_TOKEN=REDACTED",
+  "Secret": "REDACTED",
+  "Attributes": {
+   "git.author_email": "alin.voinea@eaudeweb.ro",
+   "git.author_name": "Alin Voinea",
+   "git.date": "2025-11-28T12:06:20Z",
+   "git.message": "Initial commit",
+   "git.platform": "github",
+   "git.remote_url": "https://github.com/eea/volto-redirector",
+   "git.sha": "87efd113a7d1491c804752d1778842f2f133316a",
+   "path": "RELEASE.md",
+   "resource": "git.patch_content",
+   "url": "https://github.com/eea/volto-redirector/blob/87efd113a7d1491c804752d1778842f2f133316a/RELEASE.md?plain=1#L36"
+  },
+  "Tags": [
+   "env",
+   "literal-secret",
+   "env",
+   "literal-secret"
+  ],
+  "Fingerprint": "87efd113a7d1491c804752d1778842f2f133316a:RELEASE.md:env-short-secret-assignment:36",
+  "File": "RELEASE.md",
+  "SymlinkFile": "",
+  "Commit": "87efd113a7d1491c804752d1778842f2f133316a",
+  "Entropy": 0.23519339,
+  "Author": "Alin Voinea",
+  "Email": "alin.voinea@eaudeweb.ro",
+  "Date": "2025-11-28T12:06:20Z",
+  "Message": "Initial commit"
+ },
+ {
+  "RuleID": "secret-literal-assignment",
+  "Description": "Secret-like literal assignment in source, YAML, env and config files",
+  "StartLine": 11,
+  "EndLine": 11,
+  "StartColumn": 3,
+  "EndColumn": 20,
+  "Match": "password = 'REDACTED'",
+  "Secret": "REDACTED",
+  "Attributes": {
+   "git.author_email": "alin.voinea@eaudeweb.ro",
+   "git.author_name": "Alin Voinea",
+   "git.date": "2025-11-28T12:06:20Z",
+   "git.message": "Initial commit",
+   "git.platform": "github",
+   "git.remote_url": "https://github.com/eea/volto-redirector",
+   "git.sha": "87efd113a7d1491c804752d1778842f2f133316a",
+   "path": "cypress/support/commands.js",
+   "resource": "git.patch_content",
+   "url": "https://github.com/eea/volto-redirector/blob/87efd113a7d1491c804752d1778842f2f133316a/cypress/support/commands.js#L11"
+  },
+  "Tags": [
+   "literal-secret",
+   "literal-secret"
+  ],
+  "Fingerprint": "87efd113a7d1491c804752d1778842f2f133316a:cypress/support/commands.js:secret-literal-assignment:11",
+  "File": "cypress/support/commands.js",
+  "SymlinkFile": "",
+  "Commit": "87efd113a7d1491c804752d1778842f2f133316a",
+  "Entropy": 2.321928,
+  "Author": "Alin Voinea",
+  "Email": "alin.voinea@eaudeweb.ro",
+  "Date": "2025-11-28T12:06:20Z",
+  "Message": "Initial commit"
+ },
+ {
+  "RuleID": "secret-literal-assignment",
+  "Description": "Secret-like literal assignment in source, YAML, env and config files",
+  "StartLine": 18,
+  "EndLine": 18,
+  "StartColumn": 28,
+  "EndColumn": 46,
+  "Match": "password: REDACTED",
+  "Secret": "REDACTED",
+  "Attributes": {
+   "git.author_email": "alin.voinea@eaudeweb.ro",
+   "git.author_name": "Alin Voinea",
+   "git.date": "2025-11-28T12:06:20Z",
+   "git.message": "Initial commit",
+   "git.platform": "github",
+   "git.remote_url": "https://github.com/eea/volto-redirector",
+   "git.sha": "87efd113a7d1491c804752d1778842f2f133316a",
+   "path": "cypress/support/commands.js",
+   "resource": "git.patch_content",
+   "url": "https://github.com/eea/volto-redirector/blob/87efd113a7d1491c804752d1778842f2f133316a/cypress/support/commands.js#L18"
+  },
+  "Tags": [
+   "literal-secret",
+   "literal-secret"
+  ],
+  "Fingerprint": "87efd113a7d1491c804752d1778842f2f133316a:cypress/support/commands.js:secret-literal-assignment:18",
+  "File": "cypress/support/commands.js",
+  "SymlinkFile": "",
+  "Commit": "87efd113a7d1491c804752d1778842f2f133316a",
+  "Entropy": 2.947703,
+  "Author": "Alin Voinea",
+  "Email": "alin.voinea@eaudeweb.ro",
+  "Date": "2025-11-28T12:06:20Z",
+  "Message": "Initial commit"
+ }
+]
